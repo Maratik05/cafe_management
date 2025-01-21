@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Детали заказа #{{ object.id }}</h2>
+<ul>
+    <li><strong>Номер стола:</strong> {{ object.table_number }}</li>
+    <li><strong>Список блюд:</strong>
+        <ul>
+            {% for item in object.items %}
+            <li>{{ item.name }} — {{ item.price }} ₽</li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li><strong>Общая стоимость:</strong> {{ object.total_price }} ₽</li>
+    <li><strong>Статус:</strong> {{ object.get_status_display }}</li>
+</ul>
+<a href="{% url 'order_update' object.id %}" class="btn btn-warning">Изменить</a>
+<a href="{% url 'order_list' %}" class="btn btn-secondary">Назад к списку</a>
+{% endblock %}
