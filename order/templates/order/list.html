@@ -27,9 +27,10 @@
             <td>{{ order.total_price }} ₽</td>
             <td>{{ order.get_status_display }}</td>
             <td>
-                <a href="{% url 'order-detail' order.id %}" class="btn btn-primary btn-sm">Просмотр</a>
+                <a href="{% url 'detail-order' order.id %}" class="btn btn-primary btn-sm">Просмотр</a>
+                <a href="{% url 'update-order' order.id %}" class="btn btn-primary btn-sm">Обновить</a>
                 <a href="{% url 'del-order' order.id %}" class="btn btn-primary btn-sm">Удалить</a>
-                
+
                
             </td>
         </tr>

@@ -1,23 +1,28 @@
 from django import forms
-from django.forms import formset_factory
 from .models import Order
-# class ItemForm(forms.Form):
-#     name = forms.CharField(label="Название блюда", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
-#     price = forms.DecimalField(label="Цена блюда", max_digits=10, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
-# class OrderForm(forms.Form):
-#     table_number = forms.IntegerField(label="Номер стола", widget=forms.NumberInput(attrs={'class': 'form-control'}))
-#     status = forms.ChoiceField(
-#         label="Статус заказа",
-#         choices=[('pending', 'В ожидании'), ('ready', 'Готово'), ('paid', 'Оплачено')],
-#         widget=forms.Select(attrs={'class': 'form-control'})
-#     )
-
-
-
-# ItemFormSet = formset_factory(ItemForm, extra=1) 
 
 class AddOrder(forms.ModelForm):
+    table_number = forms.IntegerField(label="Номер стола")
+    items = forms.CharField(
+        label="Блюда",
+        widget=forms.Textarea(attrs={'placeholder': 'Введите блюда и цены в формате: \nНазвание1 - Цена1\nНазвание2 - Цена2', 'rows': 7, 'cols': 30}),
+        required=True
+    )
+
     class Meta:
         model = Order
-        fields = ['table_number','items']
+        fields = ['table_number', 'items']
+
+    def clean_items(self):
+        
+        items_raw = self.cleaned_data['items']
+        items_list = []
+        try:
+            for line in items_raw.splitlines():
+                name, price = line.split('-')
+                items_list.append({'name': name.strip(), 'price': float(price.strip())})
+        except ValueError:
+            raise forms.ValidationError("Введите данные в формате: Название - Цена (каждая пара на новой строке)")
+        return items_list
+

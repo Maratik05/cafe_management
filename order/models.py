@@ -8,7 +8,7 @@ class Order(models.Model):
     
     STATUS_CHOICES = [
         ('ready', 'готово'),
-        ('pending','в ожидании'),
+        ('waiting','в ожидании'),
         ('paid', 'оплачено') 
         ]
     table_number = models.IntegerField(unique=True,verbose_name='номер стола')

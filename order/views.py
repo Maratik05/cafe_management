@@ -1,6 +1,5 @@
-from django.shortcuts import render
 from .models import Order
-from django.views.generic import ListView, DetailView, FormView, DeleteView
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, FormView
 from rest_framework.generics import ListCreateAPIView
 from .serializers import OrderSerializer
 from django.views import View
@@ -24,6 +23,18 @@ class DetailView(DetailView):
     context_object_name = "order"
 
 
+
+
+class UpdateOrder(UpdateView):
+    model = Order
+    template_name = 'order/update.html'
+    context_object_name = 'order'
+    pk_url_kwarg = 'table_number'
+    fields = ['status']
+    success_url = reverse_lazy('list-order')
+
+
+
 class AddOrder(FormView):
     template_name = 'order/form.html'
     form_class = AddOrder
@@ -32,15 +43,10 @@ class AddOrder(FormView):
 
 
     def form_valid(self, form):
-        # Логика сохранения данных заказа
         form.save()
         return super().form_valid(form)
     
 
-# class AddOrder(CreateView):
-#     model = Order
-#     template_name = "order/form.html"
-#     fields = ['table_number', 'items']
 
     
 class DeleteOrder(DeleteView):
