@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from .models import Order
 from .forms import AddOrder
+from django.db.models import Q
 
 
 
@@ -14,6 +15,17 @@ class ListView(ListView):
     model = Order
     template_name = "order/list.html"
     context_object_name = "orders"
+
+    def get_queryset(self):
+        """Фильтрация заказов по поисковому запросу и статусу"""
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('search')  # Получаем значение из поисковой строки
+        if search_query:
+            queryset = queryset.filter(
+                Q(table_number__icontains=search_query) |  # Поиск по номеру стола
+                Q(status__icontains=search_query)          # Поиск по статусу
+            )
+        return queryset
 
 
 class DetailView(DetailView):
