@@ -45,11 +45,19 @@ class UpdateOrder(UpdateView):
     form_class = UpdateOrderForm
     pk_url_kwarg = 'table_number'  # Ожидается `pk` в URL
     success_url = reverse_lazy('list-order')
+    
+    
 
     def form_valid(self, form):
-        # Если форма валидна, обновляем данные в модели
+      
         form.instance.items = form.cleaned_data['items']
         return super().form_valid(form)
+    
+   
+    
+    
+        
+
 
 
 

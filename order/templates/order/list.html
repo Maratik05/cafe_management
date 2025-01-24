@@ -5,8 +5,10 @@
 
     <!-- Форма поиска -->
     <form method="get" action="{% url 'list-order' %}">
-        <input type="text" name="search" placeholder="Поиск по номеру стола или статусу" value="{{ request.GET.search }}">
-        <button type="submit">Найти</button>
+        <div class="search_str">
+            <input type="text" name="search" placeholder="Поиск по номеру стола или статусу" value="{{ request.GET.search }}">
+            <button type="submit">Найти</button>
+        </div>
     </form>
 
     <!-- Таблица с заказами -->

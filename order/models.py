@@ -21,6 +21,10 @@ class Order(models.Model):
 
     def get_status_order(self):
         return self.status   
+    def format_items(items):
+    
+        return "\n".join(f"{item['name']} - {item['price']}" for item in items)
+    
     def get_table_number(self):
         return self.table_number
       
