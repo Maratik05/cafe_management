@@ -1,13 +1,14 @@
 from .models import Order
-from django.views.generic import ListView, DetailView, DeleteView, UpdateView, FormView
-from rest_framework.generics import ListCreateAPIView
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, FormView, TemplateView
+from rest_framework.viewsets import ModelViewSet
 from .serializers import OrderSerializer
 from django.views import View
-from django.shortcuts import render, redirect
+from rest_framework.renderers import TemplateHTMLRenderer
 from django.urls import reverse_lazy
+from rest_framework.response import Response
 from .models import Order
-from .forms import AddOrder
-from django.db.models import Q
+from .forms import AddOrderForm, UpdateOrderForm
+from django.db.models import Q, Sum
 
 
 
@@ -19,11 +20,11 @@ class ListView(ListView):
     def get_queryset(self):
         """Фильтрация заказов по поисковому запросу и статусу"""
         queryset = super().get_queryset()
-        search_query = self.request.GET.get('search')  # Получаем значение из поисковой строки
+        search_query = self.request.GET.get('search')  
         if search_query:
             queryset = queryset.filter(
-                Q(table_number__icontains=search_query) |  # Поиск по номеру стола
-                Q(status__icontains=search_query)          # Поиск по статусу
+                Q(table_number__icontains=search_query) |  
+                Q(status__icontains=search_query)         
             )
         return queryset
 
@@ -41,15 +42,20 @@ class UpdateOrder(UpdateView):
     model = Order
     template_name = 'order/update.html'
     context_object_name = 'order'
-    pk_url_kwarg = 'table_number'
-    fields = ['status']
+    form_class = UpdateOrderForm
+    pk_url_kwarg = 'table_number'  # Ожидается `pk` в URL
     success_url = reverse_lazy('list-order')
+
+    def form_valid(self, form):
+        # Если форма валидна, обновляем данные в модели
+        form.instance.items = form.cleaned_data['items']
+        return super().form_valid(form)
 
 
 
 class AddOrder(FormView):
     template_name = 'order/form.html'
-    form_class = AddOrder
+    form_class = AddOrderForm
     success_url = reverse_lazy('list-order')
 
 
@@ -67,12 +73,38 @@ class DeleteOrder(DeleteView):
     success_url = reverse_lazy('list-order')
     pk_url_kwarg = 'table_number'
 
+   
 
 
-
-class OrderApiList(ListCreateAPIView):
+class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    
+    
+
+class CalcRevenueView(TemplateView):
+    template_name = "order/calc_revenue.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        paid_orders = Order.objects.filter(status="оплачено")
+        total_revenue = paid_orders.aggregate(Sum('total_price'))['total_price__sum'] or 0
+        context['total_revenue'] = total_revenue
+        context['paid_orders'] = paid_orders
+        return context
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     search_query = self.request.query_params.get('search')
+    #     if search_query:
+    #         queryset = queryset.filter(
+    #             Q(table_number__icontains=search_query) |
+    #             Q(status__icontains=search_query)
+    #         )
+    #     return queryset
+    
+
+
     
     
     

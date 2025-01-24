@@ -7,14 +7,14 @@ class Order(models.Model):
     
     
     STATUS_CHOICES = [
-        ('ready', 'готово'),
-        ('waiting','в ожидании'),
-        ('paid', 'оплачено') 
+        ('готово', 'готово'),
+        ('в ожидании','в ожидании'),
+        ('оплачено', 'оплачено') 
         ]
     table_number = models.IntegerField(unique=True,verbose_name='номер стола')
     items = models.JSONField(verbose_name='список блюд') 
     total_price = models.DecimalField(verbose_name='Общая сумма', max_digits=10, decimal_places=2, default=0)       
-    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default='pending',verbose_name='статус заказа')
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default='в ожидании',verbose_name='статус заказа')
 
     def calc_total_price(self):
         return sum(item['price'] for item in self.items)

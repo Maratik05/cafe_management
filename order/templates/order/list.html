@@ -13,17 +13,18 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                
                 <th>Стол</th>
                 <th>Блюда</th>
                 <th>Общая стоимость</th>
                 <th>Статус</th>
+                <th>Действия над заказом</th>
             </tr>
         </thead>
         <tbody>
             {% for order in orders %}
                 <tr>
-                    <td>{{ order.id }}</td>
+                    
                     <td>{{ order.table_number }}</td>
                     <td>
                         <ul>
@@ -34,6 +35,13 @@
                     </td>
                     <td>{{ order.total_price }} ₽</td>
                     <td>{{ order.get_status_display }}</td>
+                    <td>
+                        <a href="{% url 'detail-order' order.id %}" class="btn btn-primary btn-sm">Просмотр</a>
+                        <a href="{% url 'update-order' order.id %}" class="btn btn-primary btn-sm">Обновить</a>
+                        <a href="{% url 'del-order' order.id %}" class="btn btn-primary btn-sm">Удалить</a>
+        
+                       
+                    </td>
                 </tr>
             {% empty %}
                 <tr>
@@ -43,4 +51,5 @@
         </tbody>
     </table>
 <h3><a href="{% url 'add-order' %}" class="btn btn-warning btn-sm">Добавить новый заказ</a></h3>
+<h3><a href="{% url 'calc-revenue' %}" class="btn btn-warning btn-sm">Расчет выручки</a></h3>
 {% endblock %}

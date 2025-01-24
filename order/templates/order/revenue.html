@@ -1,7 +1,0 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<h2>Рассчет выручки за смену</h2>
-<p><strong>Общая выручка за оплаченные заказы:</strong> {{ revenue }} ₽</p>
-<a href="{% url 'order_list' %}" class="btn btn-secondary">Назад к списку</a>
-{% endblock %}
