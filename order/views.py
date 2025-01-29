@@ -18,7 +18,7 @@ class ListView(ListView):
     context_object_name = "orders"
 
     def get_queryset(self):
-        """Фильтрация заказов по поисковому запросу и статусу"""
+        
         queryset = super().get_queryset()
         search_query = self.request.GET.get('search')  
         if search_query:
@@ -43,7 +43,7 @@ class UpdateOrder(UpdateView):
     template_name = 'order/update.html'
     context_object_name = 'order'
     form_class = UpdateOrderForm
-    pk_url_kwarg = 'table_number'  # Ожидается `pk` в URL
+    pk_url_kwarg = 'table_number'  
     success_url = reverse_lazy('list-order')
     
     
@@ -101,15 +101,7 @@ class CalcRevenueView(TemplateView):
         context['paid_orders'] = paid_orders
         return context
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     search_query = self.request.query_params.get('search')
-    #     if search_query:
-    #         queryset = queryset.filter(
-    #             Q(table_number__icontains=search_query) |
-    #             Q(status__icontains=search_query)
-    #         )
-    #     return queryset
+    
     
 
 

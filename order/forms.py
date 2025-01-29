@@ -48,7 +48,7 @@ class UpdateOrderForm(forms.ModelForm):
         fields = ['status', 'items']
 
     def __init__(self, *args, **kwargs):
-        # Преобразуем JSON-список блюд в удобный текстовый формат для редактирования
+        
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.items:
             items_formatted = "\n".join(
