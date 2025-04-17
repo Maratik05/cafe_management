@@ -2,10 +2,7 @@ from .models import Order
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, FormView, TemplateView
 from rest_framework.viewsets import ModelViewSet
 from .serializers import OrderSerializer
-from django.views import View
-from rest_framework.renderers import TemplateHTMLRenderer
 from django.urls import reverse_lazy
-from rest_framework.response import Response
 from .models import Order
 from .forms import AddOrderForm, UpdateOrderForm
 from django.db.models import Q, Sum
@@ -87,6 +84,7 @@ class DeleteOrder(DeleteView):
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    
     
     
 

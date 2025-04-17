@@ -14,5 +14,5 @@ urlpatterns = [
     path('delete_order/<int:table_number>', DeleteOrder.as_view(),name='del-order'),
     path('api/', include(router.urls)),
     path('calc_revenue/', CalcRevenueView.as_view(), name='calc-revenue'),
-
+    
 ]
