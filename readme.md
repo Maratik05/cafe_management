@@ -23,7 +23,7 @@
 ## Стек технологий
 
 - **Backend**: Python, Django 
-- **База данных**: SQLite 
+- **База данных**: postgreSQL
 - **API**: Django REST Framework (опционально)
 
 ---
